@@ -15,7 +15,7 @@ English: A tiny Windows launcher script that lets a single Honkai: Star Rail (CN
 4. 之后每次双击，选 `1` 官服 / `2` B服
 5. 菜单还提供：`[3]` 修改游戏目录、`[4]` 创建桌面快捷方式（自动适配 C盘/D盘/OneDrive 等任意桌面位置）
 
-游戏目录会保存在脚本同目录的 `游戏路径.conf`（仅本机使用，不会上传）。
+游戏目录会保存在脚本同目录的 `游戏路径.conf`。
 
 ## 适用前提（重要）
 
