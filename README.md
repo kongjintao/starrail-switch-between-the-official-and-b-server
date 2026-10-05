@@ -1,2 +1,62 @@
-# starrail-switch-between-the-official-and-b-server
-You can use this bat to switch starrail to b or official server, but the original file must be b server
+# 星穹铁道 官服/B服 双切启动器
+
+English: A tiny Windows launcher script that lets a single Honkai: Star Rail (CN) installation switch between the official server (米哈游账号) and the bilibili server (B站账号) at launch — no second game copy (~100 GB saved), no manual file editing.
+
+一份《崩坏：星穹铁道》客户端，启动前自动切换渠道配置：想进官服进官服，想进B服进B服。不用装两份游戏（省约 100GB 磁盘），不用手动改文件。
+
+## 使用方法
+
+1. 点击本页右上角绿色 `Code` 按钮 → `Download ZIP`，解压到任意位置
+2. 双击 `星铁双服启动器.bat`
+3. 首次运行会要求设置游戏目录（包含 `StarRail.exe` 的文件夹）：
+   - 在游戏文件夹上按住 Shift 点右键 →「复制文件地址」，粘贴后回车；或直接把文件夹拖进窗口
+   - 填它的上层目录（如 `...\Star Rail\games`）也能自动向下识别
+   - 带引号、带结尾反斜杠的粘贴内容会自动清理
+4. 之后每次双击，选 `1` 官服 / `2` B服
+5. 菜单还提供：`[3]` 修改游戏目录、`[4]` 创建桌面快捷方式（自动适配 C盘/D盘/OneDrive 等任意桌面位置）
+
+游戏目录会保存在脚本同目录的 `游戏路径.conf`（仅本机使用，不会上传）。
+
+## 适用前提（重要）
+
+游戏客户端需要是 **B服启动器（B站渠道的米哈游启动器）安装或校验过的那份**。
+
+原因：官服与B服的游戏本体文件完全相同（文件清单 `pkg_version` 一致），但B站登录组件（`PCGameSDK.dll`、`BLPlatform64` 等）只有B服启动器会下载。
+
+- B服启动器装过/校验过的客户端 → 官服、B服都能切 ✅
+- 只用官服启动器装过的客户端 → 切官服没问题，切B服可能缺少B站登录组件而无法登录；先用B服启动器对这份目录做一次安装/校验即可
+
+## 游戏更新怎么办
+
+照常用原来的启动器更新（官服启动器或B服启动器都可以，两边游戏文件同源）。更新后启动器会把渠道配置改回它自己的渠道——不用管，本脚本每次启动前都会先把配置改对再进游戏。
+
+## 工作原理
+
+游戏通过游戏目录下 `config.ini` 中的三个值区分渠道：
+
+| 渠道 | channel | sub_channel | cps |
+|---|---|---|---|
+| 官服 | `1` | `1` | `gw_PC` |
+| B服 | `14` | `0` | `bilibili_PC` |
+
+脚本在每次启动前把这三行改成所选渠道，其余内容（游戏版本号、插件版本、换行符等）逐字节原样保留，然后拉起 `StarRail.exe`。官服/B服来回切换后 `config.ini` 与原文件字节级一致（已验证）。
+
+## 文件说明
+
+| 文件 | 说明 |
+|---|---|
+| `星铁双服启动器.bat` | 双击入口 |
+| `start.ps1` | 核心脚本（PowerShell 5.1+，Win10/Win11 系统自带，无需安装） |
+| `使用说明.txt` | 纯文本说明，方便单独转发 |
+
+## 常见问题
+
+- **切换后第一次进游戏要重新登录该渠道账号？** 正常现象，两个渠道本来就是两套账号体系。
+- **双击 bat 一闪而过？** 在 PowerShell 里手动运行 `powershell -NoProfile -ExecutionPolicy Bypass -File start.ps1` 查看报错。
+- **提示找不到 StarRail.exe？** 菜单 `[3]` 重新设置一次游戏目录。
+- **切换失败？** 游戏正在运行时改写配置会失败，先关游戏再切。
+- **两个服能同时在线吗？** 不能，同一份客户端同一时间只能开一个。
+
+## 免责声明
+
+本工具仅改写本地 `config.ini` 的渠道字段，不修改任何游戏文件、不注入游戏进程。但跨渠道共用客户端属于非官方用法，请自行评估风险。
